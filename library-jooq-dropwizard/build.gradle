@@ -1,0 +1,89 @@
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+mainClassName = "com.examples.library.db.jooq.GenerateSources"
+//mainClassName = "com.examples.library.LibraryService"
+apply plugin: 'maven'
+
+
+def stage = hasProperty('stg') ? stg : 'start'
+sourceCompatibility = 1.7
+version = '1.0'
+group = "com.example"
+env = System.getenv()
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs += ["src/main/groovy"]+["src/main/resources"]
+sourceSets.main.resources.srcDirs =['src/main/resources']
+
+repositories { mavenCentral() }
+
+
+
+dependencies {
+	compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+	compile 'org.codehaus.groovy:groovy-all:2.2.0'
+	compile('org.jooq:jooq:3.2.2')
+	compile('org.jooq:jooq-meta:3.2.2')
+	compile('org.jooq:jooq-codegen:3.2.2')
+	compile('mysql:mysql-connector-java:5.1.28')
+	compile ('com.yammer.dropwizard:dropwizard-core:0.6.2')
+	testRuntime ('com.yammer.dropwizard:dropwizard-testing:0.6.2')
+	testRuntime('org.mockito:mockito-core:1.9.5')
+	compile ('org.jdbi:jdbi:2.51')
+	compile('mysql:mysql-connector-java:5.1.28')
+	compile('com.yammer.dropwizard:dropwizard-jdbi:0.6.2')
+	compile('log4j:log4j:1.2.17')
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test { systemProperties 'property': 'value' }
+
+task libs(type: Sync) {
+	from configurations.compile
+	into "libs"
+}
+
+run() { //dependsOn << build
+	dependsOn << libs }
+
+task execute(type: JavaExec, dependsOn:[classes]) {
+//	mainClassName = "com.examples.library.LibraryService"
+//	mainClass = "com.examples.library.LibraryService"
+	if(stage.equals('final')){
+		sourceSets.main.java.srcDirs = ["src/main/java"]
+	}
+	main = 'com.examples.library.LibraryService'
+	classpath = sourceSets.main.runtimeClasspath
+	
+}
+
+jar {
+	manifest {
+		attributes "Implementation-Title": "Gradle Quickstart"
+		attributes "Implementation-Version": version
+		if(stage.equals('final')){
+			mainClassName = "com.examples.library.LibraryService"
+			attributes "Main-Class" : mainClassName
+		}
+	}
+
+	// remove the security files (from mail.jar / activation.jar) so that the jar will be executable.
+	doFirst {
+		from (configurations.runtime.resolve().collect { it.isDirectory() ? it : zipTree(it) }) {
+			exclude 'META-INF/MANIFEST.MF'
+			exclude 'META-INF/*.SF'
+			exclude 'META-INF/*.DSA'
+			exclude 'META-INF/*.RSA'
+		}
+	}
+}
+
+task wrapper(type: Wrapper) { gradleVersion = '1.8' }
+
+uploadArchives {
+	repositories {
+		flatDir { dirs 'repos' }
+	}
+}
