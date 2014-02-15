@@ -12,7 +12,7 @@ In the libray.yml file
   1. Ensure the db creditials are correct
 
 
-To run the project in commanline navigate to the project folder then type in the following gradle commands
+To run the project in commanline, navigate to the project folder then execute the following commands in order. Command 2 needs to wait for 1 to finish
   
   1. gradle clean build run 
   2. gradle clean execute -Pstg=final build jar
