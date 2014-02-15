@@ -18,7 +18,9 @@ To run the project in commanline navigate to the project folder then type in the
   2. gradle clean execute -Pstg=final build jar
 
 To run the built jar
+
   java -jar build/libs/library-jooq-dropwizard-1.0.jar server library.yml
   
 In a web browser enter the following url
+
   http://localhost:8080/author/create?fname=yourfirstname&lname=namelastyour
