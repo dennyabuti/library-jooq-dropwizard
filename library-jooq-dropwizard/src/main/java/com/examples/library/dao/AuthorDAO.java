@@ -21,6 +21,11 @@ public class AuthorDAO extends AuthorDao {
 	public AuthorDAO(Configuration config) {
 		this.config = config;
 	}
+	
+/*
+ * In the database the id column needs be set to BIGINT and autoincrement
+ */
+	
 
 	public Author insertAuthor(Author author) {
 		DSLContext create = DSL.using(config.connectionProvider().acquire(),
