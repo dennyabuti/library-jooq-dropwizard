@@ -19,6 +19,7 @@ public class AuthorDAO extends AuthorDao {
 	private Configuration config;
 
 	public AuthorDAO(Configuration config) {
+		super(config);
 		this.config = config;
 	}
 	
