@@ -16,11 +16,8 @@ import com.examples.library.db.jooq.tables.records.AuthorRecord;
  */
 public class AuthorDAO extends AuthorDao {
 
-	private Configuration config;
-
 	public AuthorDAO(Configuration config) {
 		super(config);
-		this.config = config;
 	}
 	
 /*
@@ -29,7 +26,7 @@ public class AuthorDAO extends AuthorDao {
 	
 
 	public Author insertAuthor(Author author) {
-		DSLContext create = DSL.using(config.connectionProvider().acquire(),
+		DSLContext create = DSL.using(super.configuration().connectionProvider().acquire(),
 				SQLDialect.MYSQL);
 		AuthorRecord r = create.newRecord(AUTHOR);
 		r.setFirstName(author.getFirstName());
