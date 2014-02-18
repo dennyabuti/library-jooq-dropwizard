@@ -21,7 +21,7 @@ class GenerateSources {
 		GenerateSources gs = new GenerateSources()
 		String databaseName ="/library"
 		String schema="library"
-		String sourcesDir = "path-to\\library-jooq-dropwizard\\src\\main\\java"
+		String sourcesDir = "path-to/library-jooq-dropwizard/src/main/java"
 		String package_ = "com.examples.library.db.jooq"
 		String dbUrl = "jdbc:mysql://localhost:3306"
 		String username = "root"
